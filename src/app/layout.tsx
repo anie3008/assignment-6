@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
+import Navbar from "@/component/Navbar";
+import Footer from "@/component/Footer";
+
+const inter = Inter({ subsets: ["latin"] });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,10 +26,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      data-theme="dark"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}
-
+      <body className= {`${inter.className}min-h-full flex flex-col text-base-content`}>
+        
+        <Navbar />
+        {children}
+        <Footer />
          <ToastContainer />
       </body>
     </html>
