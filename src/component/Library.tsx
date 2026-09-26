@@ -1,4 +1,4 @@
-import WorkoutCards from '@/component/WorkoutCards';
+import WorkoutCards from './WorkoutCards';
 import { WorkoutItem } from '@/types/Workout';
 
 
