@@ -9,7 +9,7 @@ interface WorkoutContextType {
     setSavedForLater: React.Dispatch<React.SetStateAction<WorkoutItem[]>>; 
 }
 
-export const workoutContext = createContext<WorkoutContextType | null>(null);
+export const workoutContext = createContext<WorkoutContextType >(null);
 const WorkoutProvider = ({children}:{children: ReactNode}) => {
    const [addToPlan, setAddToPlan] = useState <WorkoutItem[]>([]);
   const [savedForLater, setSavedForLater] = useState<WorkoutItem[]>([]);
