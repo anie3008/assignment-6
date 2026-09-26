@@ -4,6 +4,7 @@ import "./globals.css";
 import { ToastContainer } from "react-toastify";
 import Navbar from "@/component/Navbar";
 import Footer from "@/component/Footer";
+import WorkoutProvider from "./context/exerciseContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,11 +31,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className= {`${inter.className}min-h-full flex flex-col text-base-content`}>
-        
+        <WorkoutProvider>
         <Navbar />
         {children}
         <Footer />
          <ToastContainer />
+         </WorkoutProvider>
       </body>
     </html>
   );
