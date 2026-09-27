@@ -10,7 +10,7 @@ interface WorkoutContextType {
     
 }
 
-export const workoutContext = createContext<WorkoutContextType >(null);
+export const workoutContext = createContext<WorkoutContextType >({} as WorkoutContextType);
 const WorkoutProvider = ({children}:{children: ReactNode}) => {
    const [addToPlan, setAddToPlan] = useState <WorkoutItem[]>([]);
   const [savedForLater, setSavedForLater] = useState<WorkoutItem[]>([]);

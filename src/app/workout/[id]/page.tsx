@@ -51,7 +51,7 @@ const ExerciseDetailsPage = async({params}:WorkoutDetailsProps) => {
             </p>
 
             <div className="flex flex-wrap gap-2 pt-1">
-              {exercise.muscleGroups.map((group, idx) => (
+              {exercise.muscleGroups.map((group :string, idx:number) => (
                 <span
                   key={idx}
                   className="inline-block rounded-full bg-[#f44369]/15 border border-[#f44369]/30 px-3.5 py-1 text-xs font-semibold text-[#f44369]"
@@ -138,7 +138,7 @@ const ExerciseDetailsPage = async({params}:WorkoutDetailsProps) => {
                 Instructions
               </h2>
               <ol className="list-decimal list-inside space-y-2 text-xs sm:text-sm text-slate-300 leading-relaxed pl-1">
-                {exercise.instructions.map((step, index) => (
+                {exercise.instructions.map((step:string, index:number) => (
                   <li key={index} className="pl-1 marker:text-[#f44369] marker:font-bold">
                     <span>{step}</span>
                   </li>

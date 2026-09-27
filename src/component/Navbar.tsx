@@ -1,15 +1,19 @@
+"use client"
 import Link from 'next/link';
-import React from 'react';
 import logo from '@/assets/logo.png';
 import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import { useContext } from 'react';
+import { workoutContext } from '@/app/context/exerciseContext';
 
 const Navbar = () => {
+const { addToPlan, savedForLater,} = useContext(workoutContext);
 
+const pathname = usePathname()
     const links = <>
-        <li><Link href={'/workout'}>Workouts</Link></li>
-        <li><Link href={'/myPlan'}>My plan</Link></li>
-
-    </>
+        <li><Link href="/workout"
+            className={pathname === "/workout" ? "border-2 border-solid border-[#3e3b92]" : ""}>Workouts</Link></li>
+        <li><Link href="/myPlan" className={pathname === "/myPlan" ? "border-2 border-solid border-[#3e3b92]" : ""}>My plan</Link></li></>
 
     return (
         <div className="navbar bg-base-100 shadow-sm">
@@ -45,15 +49,17 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="navbar-end">
-                <button className="btn rounded-4xl hover:bg-[linear-gradient(135deg,#f44369,#3e3b92)]">
-                    Plan
-                    <div className="badge badge-sm border-slate-500 rounded-full">+99</div>
-                </button>
+                <Link href={'/myPlan'}>
+                <button className="btn rounded-4xl bg-[linear-gradient(135deg,#f44369,#3e3b92)]">
+                    Plan ({addToPlan?.length || 0})
+                   </button>
+                </Link>
 
-                <button className="btn rounded-4xl hover:bg-[linear-gradient(135deg,#f44369,#3e3b92)]">
-                    Saved
-                    <div className="badge border-xsm border-slate-500 rounded-full">99</div>
+                <Link href={'/myPlan'}>
+                    <button className="btn rounded-4xl border-2 border-solid border-[#f44369]">
+                    Saved ({savedForLater?.length || 0})
                 </button>
+                </Link>
             </div>
         </div>
     );
