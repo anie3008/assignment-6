@@ -5,15 +5,15 @@ import Link from 'next/link';
 
 
 interface PlanCardProps {
-    exercise : WorkoutItem
+    exercise : WorkoutItem;
 }
-const PlanCard = ({exercise}:PlanCardProps) => {
+const PlanCard = ({exercise,}:PlanCardProps) => {
     return (
         <div className="w-full bg-[#12131e] border border-[#23253b] rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 text-[#7f7cd0] shadow-xl hover:border-[#3e3b92] transition-all duration-300">
       
      
 
-      {/* Right Section: Details & Image */}
+      
       <div className="flex items-center gap-4 w-full md:w-auto">
 <Image 
           src={exercise.image}
@@ -71,14 +71,22 @@ const PlanCard = ({exercise}:PlanCardProps) => {
     </button>
     </Link>
     {/* Delete Button */}
-    <button 
+        <button
+
       type="button"
-      aria-label="Delete" 
+
+      aria-label="Delete"
+
       className="p-2 rounded-xl bg-[#1c1d2e] hover:bg-[#23253b] text-rose-400 hover:text-rose-300 border border-[#2d2f4a] transition-colors"
+
     >
+
       <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+
         <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+
       </svg>
+
     </button>
   </div>
       

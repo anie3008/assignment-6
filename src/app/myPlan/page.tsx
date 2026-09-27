@@ -6,7 +6,7 @@ import PlanCard from '@/component/PlanCard';
 import { WorkoutItem } from '@/types/Workout';
 
 const PlanPage = () => {
-  const { addToPlan, savedForLater } = useContext(workoutContext);
+  const { addToPlan, savedForLater,} = useContext(workoutContext);
   const [activeTab, setActiveTab] = useState<"plan" | "saved">("plan");
   const [sortBy, setSortBy] = useState<"duration" | "caloriesBurned" | "rating">("duration");
 
@@ -30,6 +30,8 @@ const PlanPage = () => {
   const totalDuration = currentList?.reduce((acc, curr) => acc + (curr.duration || 0), 0) || 0;
   const totalCalories = currentList?.reduce((acc, curr) => acc + (curr.caloriesBurned || 0), 0) || 0;
 
+
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       
@@ -47,7 +49,6 @@ const PlanPage = () => {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900/40 p-2 sm:p-3 rounded-2xl border border-slate-800/60 backdrop-blur-md">
           
           <div className="flex items-center gap-2">
-            <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Exercises</span>
             <span className="text-sm font-bold text-slate-100">{totalExercises}</span>
           </div>
@@ -114,7 +115,9 @@ const PlanPage = () => {
         {currentList && currentList.length > 0 ? (
           <div className="grid grid-cols-1 gap-6">
             {currentList.map((exercise) => (
-              <PlanCard key={exercise.id} exercise={exercise} />
+              <PlanCard key={exercise.id} 
+              exercise={exercise}
+              />
             ))}
           </div>
         ) : (

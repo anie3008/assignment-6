@@ -7,6 +7,7 @@ interface WorkoutContextType {
     setAddToPlan: React.Dispatch<React.SetStateAction<WorkoutItem[]>>;
     savedForLater : WorkoutItem[]; 
     setSavedForLater: React.Dispatch<React.SetStateAction<WorkoutItem[]>>; 
+    
 }
 
 export const workoutContext = createContext<WorkoutContextType >(null);
