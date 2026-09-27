@@ -1,10 +1,9 @@
 import PlanButton from '@/component/ExerciseDetails/PlanButton';
 import SaveButton from '@/component/ExerciseDetails/SaveButton';
 import { WorkoutItem } from '@/types/Workout';
-import { Dumbbell } from 'lucide';
 import { Clock, DumbbellIcon, Flame, Gauge, Layers, Repeat, Star } from 'lucide-react';
 import Image from 'next/image';
-import React from 'react';
+
 
 interface WorkoutDetailsProps {
   exercise: WorkoutItem;
@@ -25,10 +24,10 @@ const ExerciseDetailsPage = async({params}:WorkoutDetailsProps) => {
     
     return (
        <div className="w-full max-w-6xl mx-auto overflow-hidden rounded-3xl bg-[#191830] border border-slate-800/80 shadow-2xl text-slate-100">
-      <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[600px]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 `min-h-[600px]`">
         
-        {/* Left Side: Full Size Image */}
-        <div className="lg:col-span-5 relative w-full h-72 lg:h-full min-h-[320px] bg-slate-900 overflow-hidden">
+        
+        <div className="lg:col-span-5 relative w-full h-72 lg:h-full `min-h-[320px]` bg-slate-900 overflow-hidden">
           <Image
             src={exercise.image}
             alt={exercise.name}
@@ -36,25 +35,21 @@ const ExerciseDetailsPage = async({params}:WorkoutDetailsProps) => {
             height={600}
             className="w-full h-full object-cover object-center"
           />
-          {/* Subtle overlay gradient to blend with the card theme */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#191830] via-transparent to-transparent lg:hidden" />
+          
+          <div className="absolute inset-0 bg-linear-to-t from-[#191830] via-transparent to-transparent lg:hidden" />
         </div>
 
-        {/* Right Side: Details Content */}
         <div className="lg:col-span-7 p-6 sm:p-8 flex flex-col justify-between space-y-6">
           <div className="space-y-4">
-            
-            {/* Header: Name */}
+  
             <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
               {exercise.name}
             </h1>
 
-            {/* Description */}
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
               {exercise.description}
             </p>
 
-            {/* Muscle Group Badges (Side by Side) */}
             <div className="flex flex-wrap gap-2 pt-1">
               {exercise.muscleGroups.map((group, idx) => (
                 <span
@@ -66,7 +61,7 @@ const ExerciseDetailsPage = async({params}:WorkoutDetailsProps) => {
               ))}
             </div>
 
-            {/* Workout Details Table */}
+            
             <div className="overflow-x-auto rounded-2xl border border-slate-800/80 bg-slate-950/50 my-4">
               <table className="w-full text-left text-xs sm:text-sm">
                 <tbody className="divide-y divide-slate-800/60">
@@ -137,7 +132,7 @@ const ExerciseDetailsPage = async({params}:WorkoutDetailsProps) => {
               </table>
             </div>
 
-            {/* Instructions Section */}
+            
             <div className="space-y-3">
               <h2 className="text-base sm:text-lg font-bold text-white tracking-wide">
                 Instructions
@@ -153,15 +148,9 @@ const ExerciseDetailsPage = async({params}:WorkoutDetailsProps) => {
 
           </div>
 
-          {/* Action Buttons */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t border-slate-800/80">
-            {/* Add to Today's Plan */}
             
             <PlanButton exercise ={exercise}/>
-            
-           
-            {/* Save for Later */}
-            
             <SaveButton exercise ={exercise}/>
           </div>
 

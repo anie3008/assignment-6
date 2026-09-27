@@ -1,228 +1,149 @@
-"use client"
-import React, { useContext } from 'react';
+"use client";
+import { useContext, useState } from 'react';
 import { workoutContext } from '../context/exerciseContext';
-import WorkoutCards from '@/component/WorkoutCards';
 import Link from 'next/link';
-import Image from 'next/image';
-import { Clock, Flame, Star } from 'lucide-react';
+import PlanCard from '@/component/PlanCard';
+import { WorkoutItem } from '@/types/Workout';
 
 const PlanPage = () => {
+  const { addToPlan, savedForLater } = useContext(workoutContext);
+  const [activeTab, setActiveTab] = useState<"plan" | "saved">("plan");
+  const [sortBy, setSortBy] = useState<"duration" | "caloriesBurned" | "rating">("duration");
 
-const {addToPlan,savedForLater} = useContext(workoutContext) 
+  const sortExercise = (exercise: WorkoutItem[] = []) => {
+    const sortedExercise = [...exercise];
+    if (sortBy === 'duration') {
+      sortedExercise.sort((a, b) => b.duration - a.duration);
+    } else if (sortBy === 'caloriesBurned') {
+      sortedExercise.sort((a, b) => b.caloriesBurned - a.caloriesBurned);
+    } else if (sortBy === 'rating') {
+      sortedExercise.sort((a, b) => b.rating - a.rating);
+    }
+    return sortedExercise;
+  };
 
-    return (
-        <div className="border-b border-slate-800 pb-6">
-        <h1 className="text-3xl sm:text-4xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-100 via-slate-300 to-[#7f7cd0]">
-          My Plan
-        </h1>
-        <p className="text-slate-400 text-sm sm:text-base mt-2">
-          Cap of five lifts for today. Finish them, then load more.
-        </p>
+  const sortedPlan = sortExercise(addToPlan);
+  const sortedSave = sortExercise(savedForLater);
 
-        {/* tab and sorting section */}
+  const currentList = activeTab === "plan" ? sortedPlan : sortedSave;
+  const totalExercises = currentList?.length || 0;
+  const totalDuration = currentList?.reduce((acc, curr) => acc + (curr.duration || 0), 0) || 0;
+  const totalCalories = currentList?.reduce((acc, curr) => acc + (curr.caloriesBurned || 0), 0) || 0;
 
-
-<div className="tabs tabs-box">
-  <input type="radio" name="my_tabs_6" className="tab" aria-label="Today's Plan"defaultChecked />
-
-  <div className="tab-content bg-base-100 border-base-300 p-6">
-    {addToPlan.length>0?
-        addToPlan.map((exercise) => {
-            return(
-                 <div key={exercise.id} className="w-full bg-[#12131e] border border-[#23253b] rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 text-[#7f7cd0] shadow-xl hover:border-[#3e3b92] transition-all duration-300">
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       
-     
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-slate-800/80 pb-6">
+        <div>
+          <h1 className="text-3xl sm:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-white via-slate-200 to-[#8a87ea]">
+            My Plan
+          </h1>
+          <p className="text-slate-400 text-sm sm:text-base mt-2">
+            Cap of five lifts for today. Finish them, then load more.
+          </p>
+        </div>
+      </div>
 
-      {/* Right Section: Details & Image */}
-      <div className="flex items-center gap-4 w-full md:w-auto">
-<Image 
-          src={exercise.image}
-              alt={exercise.name}
-              width={800}
-              height={600}
-          className="w-16 h-16 rounded-xl object-cover shrink-0 border border-[#23253b]"
-        />
-        {/* Exercise Information */}
-        <div className="flex flex-col text-left">
-          {/* Title & Difficulty Badge */}
-          <div className="flex items-center gap-2 mb-1">
-            
-            <h3 className="text-base font-bold text-white tracking-wide">
-              {exercise.name}
-            </h3>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900/40 p-2 sm:p-3 rounded-2xl border border-slate-800/60 backdrop-blur-md">
+          
+          <div className="flex items-center gap-2">
+            <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Exercises</span>
+            <span className="text-sm font-bold text-slate-100">{totalExercises}</span>
           </div>
 
-          {/* Equipment */}
-          <p className="text-xs text-[#7f7cd0]/80 font-medium mb-2">
-            {exercise.equipment}
-          </p>
-
-          {/* Stats Row (Duration, Calories, Rating) */}
-           <div className="flex items-center gap-2 text-xs font-medium text-[#a5a3e0]">
-        <div className="flex items-center gap-1.5 p-1.5 px-2.5 rounded-lg bg-[#1f1d33]/50">
-          <Clock size={14} className="text-[#f44369]" />
-          <span>{exercise.duration} mins</span>
-        </div>
-
-        <div className="flex items-center gap-1.5 p-1.5 px-2.5 rounded-lg bg-[#1f1d33]/50">
-          <Flame size={14} className="text-[#f44369]" />
-          <span>{exercise.caloriesBurned} kcal</span>
-        </div>
-
-        <div className="flex items-center gap-1.5 p-1.5 px-2.5 rounded-lg bg-[#1f1d33]/50">
-          <Star size={14} className="text-[#f44369]" />
-          <span>{exercise.rating}</span>
-        </div>
-      </div>
-    </div>
-        </div>
-        
-      
-
-       <div className="flex items-center gap-2 shrink-0 w-full md:w-auto justify-end">
-    {/* View Details Button */}
-    <button 
-      type="button"
-      style={{ background: 'linear-gradient(135deg, #f44369, #3e3b92)' }}
-      className="px-4 py-2 text-xs font-semibold text-white rounded-xl hover:opacity-90 transition-opacity shadow-md shadow-[#f44369]/20"
-    >
-      View Details
-    </button>
-
-    {/* Mark as Done Button */}
-    <button 
-      type="button"
-      aria-label="Mark as Done" 
-      className="p-2 rounded-xl bg-[#1c1d2e] hover:bg-[#23253b] text-emerald-400 hover:text-emerald-300 border border-[#2d2f4a] transition-colors"
-    >
-      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-      </svg>
-    </button>
-
-    {/* Delete Button */}
-    <button 
-      type="button"
-      aria-label="Delete" 
-      className="p-2 rounded-xl bg-[#1c1d2e] hover:bg-[#23253b] text-rose-400 hover:text-rose-300 border border-[#2d2f4a] transition-colors"
-    >
-      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-      </svg>
-    </button>
-  </div>
-      
-
-    </div>
-            ) 
-        }): <div className='text-center'>
-            <h1 className="text-xl sm:text-4xl font-medium tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-100 via-slate-300 to-[#7f7cd0]">
-          NOTHING HERE YET
-        </h1>
-        <p className="text-slate-400 text-sm sm:text-base mt-2 mb-3">
-         Browse the library and add a lift to get today moving.
-        </p>
-        <button className="btn bg-[linear-gradient(135deg,#f44369,#3e3b92)]"><Link href={'/workout'}>Go to Workouts</Link></button>
-        </div>
-    }
-  </div>
-
-  <input type="radio" name="my_tabs_6" className="tab" aria-label="Saved"/>
-  <div className="tab-content bg-base-100 border-base-300 p-6">
-    {savedForLater.length>0?
-        savedForLater.map((exercise) => {
-            return(
-                 <div key={exercise.id} className="w-full bg-[#12131e] border border-[#23253b] rounded-2xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 text-[#7f7cd0] shadow-xl hover:border-[#3e3b92] transition-all duration-300">
-      
-     
-
-      {/* Right Section: Details & Image */}
-      <div className="flex items-center gap-4 w-full md:w-auto">
-<Image 
-          src={exercise.image}
-              alt={exercise.name}
-              width={800}
-              height={600}
-          className="w-16 h-16 rounded-xl object-cover shrink-0 border border-[#23253b]"
-        />
-        {/* Exercise Information */}
-        <div className="flex flex-col text-left">
-          {/* Title & Difficulty Badge */}
-          <div className="flex items-center gap-2 mb-1">
-            
-            <h3 className="text-base font-bold text-white tracking-wide">
-              {exercise.name}
-            </h3>
+          <div className="h-4 w-px bg-slate-800 hidden sm:block" />
+          <div className="flex items-center gap-1.5">
+            <span className="text-sm"></span>
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Time:</span>
+            <span className="text-sm font-bold text-slate-100">{totalDuration} min</span>
           </div>
 
-          {/* Equipment */}
-          <p className="text-xs text-[#7f7cd0]/80 font-medium mb-2">
-            {exercise.equipment}
-          </p>
-
-          {/* Stats Row (Duration, Calories, Rating) */}
-           <div className="flex items-center gap-2 text-xs font-medium text-[#a5a3e0]">
-        <div className="flex items-center gap-1.5 p-1.5 px-2.5 rounded-lg bg-[#1f1d33]/50">
-          <Clock size={14} className="text-[#f44369]" />
-          <span>{exercise.duration} mins</span>
+          <div className="h-4 w-px bg-slate-800 hidden sm:block" />
+          <div className="flex items-center gap-1.5">
+            <span className="text-sm"></span>
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Burn:</span>
+            <span className="text-sm font-bold text-rose-400">{totalCalories} kcal</span>
+          </div>
         </div>
+     
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-900/40 p-2 sm:p-3 rounded-2xl border border-slate-800/60 backdrop-blur-md">
+       
+        <div className="flex items-center bg-slate-950/80 p-1 rounded-xl border border-slate-800/80 w-full sm:w-auto">
+          <button
+            onClick={() => setActiveTab("plan")}
+            className={`flex-1 sm:flex-initial px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 ${
+              activeTab === "plan"
+                ? "bg-linear-to-r from-[#f44369] to-[#3e3b92] text-white shadow-lg shadow-rose-950/30"
+                : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/50"
+            }`}
+          >
+            Today&apos;s Plan 
+          </button>
 
-        <div className="flex items-center gap-1.5 p-1.5 px-2.5 rounded-lg bg-[#1f1d33]/50">
-          <Flame size={14} className="text-[#f44369]" />
-          <span>{exercise.caloriesBurned} kcal</span>
+          <button
+            onClick={() => setActiveTab("saved")}
+            className={`flex-1 sm:flex-initial px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300 ${
+              activeTab === "saved"
+                ? "bg-linear-to-r from-[#f44369] to-[#3e3b92] text-white shadow-lg shadow-rose-950/30"
+                : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/50"
+            }`}
+          >
+            Saved for Later 
+          </button>
         </div>
-
-        <div className="flex items-center gap-1.5 p-1.5 px-2.5 rounded-lg bg-[#1f1d33]/50">
-          <Star size={14} className="text-[#f44369]" />
-          <span>{exercise.rating}</span>
+        <div className="flex items-center gap-2 self-end sm:self-auto w-full sm:w-auto">
+          <label htmlFor="sort-by" className="text-xs uppercase tracking-wider text-slate-400 font-semibold hidden md:inline-block">
+            Sort:
+          </label>
+          <select
+            id="sort-by"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as "duration" | "caloriesBurned" | "rating")}
+            className="w-full sm:w-48 bg-slate-950 text-slate-200 text-sm font-medium border border-slate-800 rounded-xl px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-[#f44369]/50 focus:border-[#f44369] transition-all cursor-pointer"
+          >
+            <option value="duration"> Duration</option>
+            <option value="caloriesBurned"> Calories</option>
+            <option value="rating"> Rating</option>
+          </select>
         </div>
       </div>
-    </div>
-        </div>
-        
+
       
+      <div className="mt-6">
+        {currentList && currentList.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6">
+            {currentList.map((exercise) => (
+              <PlanCard key={exercise.id} exercise={exercise} />
+            ))}
+          </div>
+        ) : (
+          
+          <div className="flex flex-col items-center justify-center text-center p-10 sm:p-16 rounded-3xl bg-slate-900/30 border border-slate-800/60 backdrop-blur-sm my-8 space-y-4">
+            
+            
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight bg-clip-text text-transparent bg-linear-to-r from-slate-100 via-slate-300 to-[#8a87ea]">
+              {activeTab === "plan" ? "YOUR PLAN IS EMPTY" : "NO SAVED WORKOUTS"}
+            </h2>
 
-       <div className="flex items-center gap-2 shrink-0 w-full md:w-auto justify-end">
-    {/* View Details Button */}
-    <button 
-      type="button"
-      style={{ background: 'linear-gradient(135deg, #f44369, #3e3b92)' }}
-      className="px-4 py-2 text-xs font-semibold text-white rounded-xl hover:opacity-90 transition-opacity shadow-md shadow-[#f44369]/20"
-    >
-      View Details
-    </button>
-    {/* Delete Button */}
-    <button 
-      type="button"
-      aria-label="Delete" 
-      className="p-2 rounded-xl bg-[#1c1d2e] hover:bg-[#23253b] text-rose-400 hover:text-rose-300 border border-[#2d2f4a] transition-colors"
-    >
-      <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
-      </svg>
-    </button>
-  </div>
-      
+            <p className="text-slate-400 text-sm sm:text-base max-w-md mx-auto">
+              Browse the library and add a lift to get today moving and hit your daily goals.
+            </p>
 
-    </div>
-            ) 
-        }): <div className='text-center'>
-            <h1 className="text-xl sm:text-4xl font-medium tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-slate-100 via-slate-300 to-[#7f7cd0]">
-          NOTHING HERE YET
-        </h1>
-        <p className="text-slate-400 text-sm sm:text-base mt-2 mb-3">
-         Browse the library and add a lift to get today moving.
-        </p>
-        <button className="btn bg-[linear-gradient(135deg,#f44369,#3e3b92)]"><Link href={'/workout'}>Go to Workouts</Link></button>
-        </div>
-    }
-  </div>
-
-</div>
+            <Link
+              href="/workout"
+              className="mt-2 inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white bg-linear-to-r from-[#f44369] to-[#3e3b92] hover:opacity-95 active:scale-95 transition-all duration-200 shadow-lg shadow-rose-950/40"
+            >
+              <span>Go to Workouts</span>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+              </svg>
+            </Link>
+          </div>
+        )}
       </div>
-    );
+    </div>
+  );
 };
 
 export default PlanPage;
-
-
